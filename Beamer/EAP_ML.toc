@@ -1,5 +1,0 @@
-\beamer@sectionintoc {1}{\textsc {Introduction:}}{3}{0}{1}
-\beamer@sectionintoc {2}{\textsc {Penalized Regressions:}}{10}{0}{2}
-\beamer@sectionintoc {3}{\textsc {Dimensionality Reduction:}}{15}{0}{3}
-\beamer@sectionintoc {4}{\textsc {Non-Linear Models \& Results}}{23}{0}{4}
-\beamer@sectionintoc {5}{\textsc {Conclusion:}}{31}{0}{5}
