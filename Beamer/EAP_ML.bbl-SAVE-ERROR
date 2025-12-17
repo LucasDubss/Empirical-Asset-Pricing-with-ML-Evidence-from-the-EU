@@ -1,0 +1,198 @@
+% $ biblatex auxiliary file $
+% $ biblatex bbl format version 3.2 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated by
+% biber as required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+
+\refsection{0}
+  \datalist[entry]{nty/global//global/global}
+    \entry{drobetz_empirical_2020}{article}{}
+      \name{author}{2}{}{%
+        {{hash=8e5d5a6d44578abec5873eb7e02a40d3}{%
+           family={Drobetz},
+           familyi={D\bibinitperiod},
+           given={Wolfgang},
+           giveni={W\bibinitperiod}}}%
+        {{hash=7585a76a5d654a566f2db19cd3c79892}{%
+           family={Otto},
+           familyi={O\bibinitperiod},
+           given={Tizian},
+           giveni={T\bibinitperiod}}}%
+      }
+      \list{language}{1}{%
+        {en}%
+      }
+      \list{publisher}{1}{%
+        {Social Science Research Network}%
+      }
+      \strng{namehash}{66cd81b8dc4ab6581c8a8b397c3b80df}
+      \strng{fullhash}{66cd81b8dc4ab6581c8a8b397c3b80df}
+      \strng{bibnamehash}{66cd81b8dc4ab6581c8a8b397c3b80df}
+      \strng{authorbibnamehash}{66cd81b8dc4ab6581c8a8b397c3b80df}
+      \strng{authornamehash}{66cd81b8dc4ab6581c8a8b397c3b80df}
+      \strng{authorfullhash}{66cd81b8dc4ab6581c8a8b397c3b80df}
+      \field{sortinit}{D}
+      \field{sortinithash}{6f385f66841fb5e82009dc833c761848}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{shorttitle}
+      \field{abstract}{This paper evaluates the performance of machine learning methods in forecasting stock returns. Compared to a linear benchmark model, interactions and non-linear effects help improve predictive performance. But machine learning models must be adequately trained and tuned to overcome the high dimensionality issue and to avoid over-fitting. Across all machine learning methods, the most important predictors are based on price trends and fundamental signals from valuation ratios. However, the models exhibit disparities in statistical performance that translate into pronounced differences in economic profitability. The return and risk measures of long-only trading strategies indicate that machine learning models produce size-able gains relative to our benchmark. Neural networks perform best, even after adjusting for risk and accounting for transaction costs. However, a classification-based portfolio formation, utilizing a support vector machine that avoids estimating stock-level expected returns, performs even better than the neural network architecture.}
+      \field{month}{7}
+      \field{shorttitle}{Empirical {Asset} {Pricing} via {Machine} {Learning}}
+      \field{title}{Empirical {Asset} {Pricing} via {Machine} {Learning}: {Evidence} from the {European} {Stock} {Market}}
+      \field{type}{{SSRN} {Scholarly} {Paper}}
+      \field{urlday}{17}
+      \field{urlmonth}{12}
+      \field{urlyear}{2025}
+      \field{year}{2020}
+      \field{urldateera}{ce}
+      \verb{doi}
+      \verb 10.2139/ssrn.3640631
+      \endverb
+      \verb{file}
+      \verb Full Text PDF:/Users/lucasdubois/Zotero/storage/A2STTKS3/Drobetz et Otto - 2020 - Empirical Asset Pricing via Machine Learning Evidence from the European Stock Market.pdf:application/pdf
+      \endverb
+      \verb{urlraw}
+      \verb https://papers.ssrn.com/abstract=3640631
+      \endverb
+      \verb{url}
+      \verb https://papers.ssrn.com/abstract=3640631
+      \endverb
+      \keyw{active trading strategy,stock return prediction machine learning}
+    \endentry
+    \entry{fama_common_1993}{article}{}
+      \name{author}{2}{}{%
+        {{hash=cf1dad75742cba1f00261a0ee70e7ba2}{%
+           family={Fama},
+           familyi={F\bibinitperiod},
+           given={Eugene\bibnamedelima F.},
+           giveni={E\bibinitperiod\bibinitdelim F\bibinitperiod}}}%
+        {{hash=4ca55f4db61ae3245d066a218dca72c8}{%
+           family={French},
+           familyi={F\bibinitperiod},
+           given={Kenneth\bibnamedelima R.},
+           giveni={K\bibinitperiod\bibinitdelim R\bibinitperiod}}}%
+      }
+      \list{language}{1}{%
+        {en}%
+      }
+      \strng{namehash}{ac5c181ffbfa45c593cd5483bcb59bd3}
+      \strng{fullhash}{ac5c181ffbfa45c593cd5483bcb59bd3}
+      \strng{bibnamehash}{ac5c181ffbfa45c593cd5483bcb59bd3}
+      \strng{authorbibnamehash}{ac5c181ffbfa45c593cd5483bcb59bd3}
+      \strng{authornamehash}{ac5c181ffbfa45c593cd5483bcb59bd3}
+      \strng{authorfullhash}{ac5c181ffbfa45c593cd5483bcb59bd3}
+      \field{sortinit}{F}
+      \field{sortinithash}{2638baaa20439f1b5a8f80c6c08a13b4}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{issn}{0304405X}
+      \field{journaltitle}{Journal of Financial Economics}
+      \field{month}{2}
+      \field{number}{1}
+      \field{title}{Common risk factors in the returns on stocks and bonds}
+      \field{urlday}{21}
+      \field{urlmonth}{11}
+      \field{urlyear}{2025}
+      \field{volume}{33}
+      \field{year}{1993}
+      \field{urldateera}{ce}
+      \field{pages}{3\bibrangedash 56}
+      \range{pages}{54}
+      \verb{doi}
+      \verb 10.1016/0304-405X(93)90023-5
+      \endverb
+      \verb{file}
+      \verb PDF:/Users/lucasdubois/Zotero/storage/24WZPY25/Fama et French - 1993 - Common risk factors in the returns on stocks and bonds.pdf:application/pdf
+      \endverb
+      \verb{urlraw}
+      \verb https://linkinghub.elsevier.com/retrieve/pii/0304405X93900235
+      \endverb
+      \verb{url}
+      \verb https://linkinghub.elsevier.com/retrieve/pii/0304405X93900235
+      \endverb
+    \endentry
+    \entry{gu_empirical_2020}{article}{}
+      \name{author}{3}{}{%
+        {{hash=6dfe1a2bf09425e309ca767a1acc7325}{%
+           family={Gu},
+           familyi={G\bibinitperiod},
+           given={Shihao},
+           giveni={S\bibinitperiod}}}%
+        {{hash=96799198bea175b6a69479505180a2cd}{%
+           family={Kelly},
+           familyi={K\bibinitperiod},
+           given={Bryan},
+           giveni={B\bibinitperiod}}}%
+        {{hash=c07af227d21eedc8d6d13f10a6243d02}{%
+           family={Xiu},
+           familyi={X\bibinitperiod},
+           given={Dacheng},
+           giveni={D\bibinitperiod}}}%
+      }
+      \name{editor}{1}{}{%
+        {{hash=e68d087702e9d9b1cac5745a7f97935a}{%
+           family={Karolyi},
+           familyi={K\bibinitperiod},
+           given={Andrew},
+           giveni={A\bibinitperiod}}}%
+      }
+      \list{language}{1}{%
+        {en}%
+      }
+      \strng{namehash}{3fcd024cd3a906ee97216ed3d8ad76c6}
+      \strng{fullhash}{3fcd024cd3a906ee97216ed3d8ad76c6}
+      \strng{bibnamehash}{3fcd024cd3a906ee97216ed3d8ad76c6}
+      \strng{authorbibnamehash}{3fcd024cd3a906ee97216ed3d8ad76c6}
+      \strng{authornamehash}{3fcd024cd3a906ee97216ed3d8ad76c6}
+      \strng{authorfullhash}{3fcd024cd3a906ee97216ed3d8ad76c6}
+      \strng{editorbibnamehash}{e68d087702e9d9b1cac5745a7f97935a}
+      \strng{editornamehash}{e68d087702e9d9b1cac5745a7f97935a}
+      \strng{editorfullhash}{e68d087702e9d9b1cac5745a7f97935a}
+      \field{sortinit}{G}
+      \field{sortinithash}{32d67eca0634bf53703493fb1090a2e8}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{Abstract We perform a comparative analysis of machine learning methods for the canonical problem of empirical asset pricing: measuring asset risk premiums. We demonstrate large economic gains to investors using machine learning forecasts, in some cases doubling the performance of leading regression-based strategies from the literature. We identify the best-performing methods (trees and neural networks) and trace their predictive gains to allowing nonlinear predictor interactions missed by other methods. All methods agree on the same set of dominant predictive signals, a set that includes variations on momentum, liquidity, and volatility. Authors have furnished an Internet Appendix, which is available on the Oxford University Press Web site next to the link to the final published paper online.}
+      \field{issn}{0893-9454, 1465-7368}
+      \field{journaltitle}{The Review of Financial Studies}
+      \field{month}{5}
+      \field{number}{5}
+      \field{title}{Empirical {Asset} {Pricing} via {Machine} {Learning}}
+      \field{urlday}{24}
+      \field{urlmonth}{10}
+      \field{urlyear}{2025}
+      \field{volume}{33}
+      \field{year}{2020}
+      \field{urldateera}{ce}
+      \field{pages}{2223\bibrangedash 2273}
+      \range{pages}{51}
+      \verb{doi}
+      \verb 10.1093/rfs/hhaa009
+      \endverb
+      \verb{file}
+      \verb PDF:/Users/lucasdubois/Zotero/storage/4LH6CWDW/Gu et al. - 2020 - Empirical Asset Pricing via Machine Learning.pdf:application/pdf
+      \endverb
+      \verb{urlraw}
+      \verb https://academic.oup.com/rfs/article/33/5/2223/5758276
+      \endverb
+      \verb{url}
+      \verb https://academic.oup.com/rfs/article/33/5/2223/5758276
+      \endverb
+    \endentry
+  \enddatalist
+\endrefsection
+\endinput
+

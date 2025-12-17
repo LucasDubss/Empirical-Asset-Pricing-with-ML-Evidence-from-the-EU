@@ -25,8 +25,8 @@
 ]
 \setmonofont{Fira Mono}[Scale=MatchLowercase]
 
-\title{\textsc{Empirical Asset Pricing via Machine Learning}}
-\author{Lucas DUBOIS, Myriam LAMBORELLE, William LEMAIRE \& Tom PARMENTIER}
+\title{\textsc{Empirical Asset Pricing via ML in the EU}}
+\author{Lucas DUBOIS \& Myriam LAMBORELLE}
 \institute{HEC Liège}
 \date{\today}
 
@@ -91,44 +91,126 @@
 % ================== Content ==================
 \section{\textsc{Introduction:}}
 
-\begin{frame}{\textsc{Objectives:}}
-    The paper {\color{primaryred}"Empirical Asset Pricing via Machine Learning"} \cite{gu_empirical_2020} has a twofold objective:
-  \begin{enumerate}
-   \item Setting {\color{steelblue} new benchmarks} to compare ML methods for asset pricing.
-   \item Synthesizing the {\color{steelblue}asset pricing theory} with the emerging {\color{steelblue} ML literature}.
-  \end{enumerate}
-\end{frame}
-
-\begin{frame}{\textsc{Definition:}}
-    What is {\color{steelblue}\textbf{Machine Learning (ML)}}?
-    \begin{enumerate}
-        \item {\color{primaryred}High-dimensional models.}
-        \begin{itemize}
-            \item[\textcolor{darkgreen}{\ding{51}}] Flexibility.
-            \item[\textcolor{red}{\ding{55}}] Overfitting.
-        \end{itemize}
-        \item {\color{primaryred}“Regularization” methods for model selection.}
-            \begin{itemize}
-                \item[\textcolor{darkgreen}{\ding{51}}] Fix Overfitting.
-            \end{itemize}
-        \item {\color{primaryred}Efficient algorithms for searching model specifications.}
-            \begin{itemize}
-                \item[\textcolor{darkgreen}{\ding{51}}] Fix non-linearities.
-            \end{itemize}
-    \end{enumerate}
-\end{frame}
-
+%=================HERE FOR THE NEW PART=================
 
 \begin{frame}{\textsc{Dataset and Metrics:}}
-    \begin{itemize}
-        \item {\color{primaryred}\textbf{Universe:}} Monthly U.S. equities (CRSP/Compustat)
-        \item {\color{primaryred}\textbf{Sample:}} {\color{steelblue}\textbf{30,000 individual stocks}}.
-        \item {\color{primaryred}\textbf{Period:}} {\color{steelblue}\textbf{60 years}} (1957–2016)
-        \item {\color{primaryred}\textbf{Predictors:}} {\textbf{94 firm-level characteristics}} from the "factor zoo" + {\textbf{74 industry-sector dummies}} + interaction terms.
+  \begin{itemize}
+      \item {\color{primaryred}\textbf{Universe:}} Monthly european equities (Refinitiv)
+      \item {\color{primaryred}\textbf{Sample:}} {\color{steelblue}\textbf{599 individual stocks}} (stoxx600 constituents).
+      \item {\color{primaryred}\textbf{$R_f$:}} EURIBOR 1M.
+      \item {\color{primaryred}\textbf{Period:}}
+         {\color{harmonizedblue}\textbf{
+$\underbrace{2005\text{--}2015}_{\text{Train}}
+\;\;|\;\;
+\underbrace{2016\text{--}2025}_{\text{Test}}$
+}}
+      \item {\color{primaryred}\textbf{Predictors:}} {\textbf{ 10 firm-level characteristics}}  + {\textbf{12 interaction terms.}} 
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{\textsc{Winsorization and Standardization}}
+  \begin{algorithm}[H]
+    \small
+    \caption{{\color{primaryred}Cross-Sectional Standardizer}}
+    \begin{algorithmic}
+      \STATE \textbf{Input:} Training data $\mathcal{D}^{\text{train}}$, data $\mathcal{D}$, predictors $\mathcal{X}$
+      
+      \FOR{each predictor $j \in \mathcal{X}$}
+        \STATE Compute lower quantile $q_j^{L}$ and upper quantile $q_j^{U}$ from $\mathcal{D}^{\text{train}}$
+        \STATE Compute mean $\mu_j$ and standard deviation $\sigma_j$ from $\mathcal{D}^{\text{train}}$
+      \ENDFOR
+      
+      \FOR{each observation $i \in \mathcal{D}$}
+        \FOR{each predictor $j \in \mathcal{X}$}
+          \STATE $X_{ij} \leftarrow \min(\max(X_{ij}, q_j^{L}), q_j^{U})$
+          \STATE $\tilde{X}_{ij} \leftarrow (X_{ij} - \mu_j) / \sigma_j$
+        \ENDFOR
+      \ENDFOR
+          \end{algorithmic}
+  \end{algorithm}
+\end{frame}
+
+\begin{frame}{\textsc{Winsorization and Standardization}}
+  \textcolor{primaryred}{GKN} \cite{gu_empirical_2020} do not explicitly describe how firm characteristics are preprocessed, so we follow {\color{primaryred}Drobetz and Otto} \cite{drobetz_empirical_2020} and implement a \textcolor{harmonizedblue}{winsorization} procedure.
+  \medskip
+\begin{center}
+  \textit{Values below the lower threshold are replaced by the maximum of the lower tail (\textcolor{primaryred}{1st-percentile} ), and values above the upper threshold are replaced by the minimum of the upper tail (\textcolor{steelblue}{99th-percentile}). Predictors are then standardized using training-sample moments.}
+\end{center}
+  \medskip
+  \begin{itemize}
+      \item[\textcolor{darkgreen}{\ding{51}}] Limits influence of outliers.
+      \item[\textcolor{darkgreen}{\ding{51}}] Ensures comparable scale across predictors.
+      \item[\textcolor{darkgreen}{\ding{51}}] Improves out-of-sample performance.
+  \end{itemize}
+  \end{frame}
+  \begin{frame}{\textsc{Cross-Validation for Tuning Parameters:}}
+    The authors use a \textbf{\color{steelblue} rolling one-step-ahead out-of-sample cross-validation} procedure to select the \textbf{\color{primaryred}hyperparameters} of their models:
+      \begin{align}
+        {\color{primaryred}(\lambda^\ast,\rho^\ast)}
+        &= \arg\min_{\lambda,\rho}
+        \sum_{t=T_0}^{T-1}
+        \sum_{i=1}^{N_t}
+        \bigl( r_{i,t+1} - \hat r_{i,t+1}(\lambda,\rho) \bigr)^2 .
+        \end{align}    
+    This allows to:
+    \begin{enumerate}
+      \item Account for \textbf{\color{steelblue} time-series dependence} in financial data.
+      \item Mimic how \textbf{\color{steelblue} investors} would forecast their portfolios.
+      \item Prevent \textbf{\color{steelblue} look-ahead bias} (terrible idea in finance!).
+    \end{enumerate}
+    \end{frame}
+
+  \begin{frame}{\textsc{Look-Ahead Bias Checks}}    
+    \begin{enumerate}
+        \item {\color{primaryred}Placebo Test}
         \begin{itemize}
-            \item {\color{steelblue} \textbf{900+ predictors}} in total.
+            \item[\textcolor{darkgreen}{\ding{51}}] Replace model predictions with random noise.
+            \item[\textcolor{darkgreen}{\ding{51}}] Verifies that portfolio construction alone does not generate spurious profits.
         \end{itemize}
-    \end{itemize}
+    
+        \item {\color{primaryred}Portfolio Cutoff Robustness}
+        \begin{itemize}
+            \item[\textcolor{darkgreen}{\ding{51}}] Vary the fraction of stocks in long and short portfolios.
+            \item[\textcolor{darkgreen}{\ding{51}}] Verifies if results don't "break" with different cutoffs.
+        \end{itemize}
+    
+        \item {\color{primaryred}Lagged Signal Test}
+        \begin{itemize}
+            \item[\textcolor{darkgreen}{\ding{51}}] Shift predicted signals backward in time.
+            \item[\textcolor{darkgreen}{\ding{51}}] Confirms that results do not rely on forward-looking information.
+        \end{itemize}
+    \end{enumerate}
+
+    \end{frame}
+    
+\section{\textsc{Models}}
+  
+\begin{frame}{\textsc{The Huber Loss Function}}
+
+  Following GKN \cite{gu_empirical_2020}, we use a \textbf{\color{steelblue}Huber loss function} to be robust to outliers when estimating our OLS benchmark models:
+   \begin{align}
+     {\color{primaryred}L_\delta(u)}=
+     \begin{cases}
+       \frac{1}{2} u^2, & \text{if } |u|\le {\color{steelblue}\delta}, \\
+       \delta\left(|u|-\frac{1}{2}\delta\right), & \text{if } |u|>{\color{steelblue}\delta}.
+     \end{cases}
+   \end{align}  
+ \medskip
+ This allows:
+ \begin{itemize}
+   \item[\textcolor{darkgreen}{\ding{51}}] To control the influence of \textcolor{harmonizedblue}{extreme return observations}.
+   \item[\textcolor{darkgreen}{\ding{51}}] Avoid the \textcolor{harmonizedblue}{sensitivity of MSE} to fat tails in return distributions.
+ \end{itemize}
+ \end{frame}
+
+ \section{\textsc{Results}}
+
+\begin{frame}{Cummulation of Wealth}
+  \begin{figure}
+    \centering
+    \includegraphics[width=1.0\textwidth]{/Users/lucasdubois/Desktop/LaTeX/EAP-ML/CODE/Images/cum_plot.png}
+    \label{fig:cummulative_wealth}
+  \end{figure}
 \end{frame}
 
 \begin{frame}{\textsc{Benchmark Model:}}
@@ -163,22 +245,7 @@ This benchmark is commonly used in the empirical asset pricing literature, as we
 \end{itemize}
 \end{frame}
 
-\begin{frame}{\textsc{Cross-Validation for Tuning Parameters:}}
-The authors use a \textbf{\color{steelblue} rolling one-step-ahead out-of-sample cross-validation} procedure to select the \textbf{\color{primaryred}hyperparameters} of their models:
-  \begin{align}
-    {\color{primaryred}(\lambda^\ast,\rho^\ast)}
-    &= \arg\min_{\lambda,\rho}
-    \sum_{t=T_0}^{T-1}
-    \sum_{i=1}^{N_t}
-    \bigl( r_{i,t+1} - \hat r_{i,t+1}(\lambda,\rho) \bigr)^2 .
-    \end{align}    
-This allows to:
-\begin{enumerate}
-  \item Account for \textbf{\color{steelblue} time-series dependence} in financial data.
-  \item Mimic how \textbf{\color{steelblue} investors} would forecast their portfolios.
-  \item Prevent \textbf{\color{steelblue} look-ahead bias} (terrible idea in finance!).
-\end{enumerate}
-\end{frame}
+
 \section{\textsc{Penalized Regressions:}}
 
 \begin{frame}{\textsc{General Idea:}}
