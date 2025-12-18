@@ -98,7 +98,7 @@
   \begin{itemize}
       \item {\color{primaryred}\textbf{Universe:}} Monthly european stocks (Refinitiv).
       \item {\color{primaryred}\textbf{Sample:}} {\color{steelblue}\textbf{599 individual stocks}} (stoxx600 constituents).
-      \item {\color{primaryred}\textbf{$R_f$:}} EURIBOR 1M.
+      \item {\color{primaryred}\textbf{$R_f$} :} EURIBOR 1M.
       \item {\color{primaryred}\textbf{Period:}}
          {\color{harmonizedblue}\textbf{
 $\underbrace{2005\text{--}2015}_{\text{Train}}
@@ -270,6 +270,9 @@ GKN \cite{gu_empirical_2020} propose to evaluate model performance using the \te
    \item[\textcolor{darkgreen}{\ding{51}}] Avoid the \textcolor{harmonizedblue}{sensitivity of MSE} to fat tails in return distributions.
  \end{itemize}
  \end{frame}
+
+ \section{\textsc{Results \& Discussion}}
+
  \begin{frame}{$R_{OOS}^2$ \textsc{BEST Models:}}
 
   \centering
@@ -364,9 +367,7 @@ GKN \cite{gu_empirical_2020} propose to evaluate model performance using the \te
 
 \end{frame}
 
- \section{\textsc{Results \& Discussion}}
-
-\begin{frame}{Cummulation of Wealth}
+\begin{frame}{\textsc{Cummulative Wealth Plot:}}
   \begin{figure}
     \centering
     \includegraphics[width=1.0\textwidth]{/Users/lucasdubois/Desktop/LaTeX/EAP-ML/CODE/Images/cum_plot.png}
@@ -376,12 +377,12 @@ GKN \cite{gu_empirical_2020} propose to evaluate model performance using the \te
 
 \begin{frame}{\textsc{Discussion}}
   \begin{enumerate}
-    \item ${\color{harmonizedblue}R^2_{OOS}(ML)} > {\color{harmonizedblue}R^2_{OOS}(GKN)}$, but ${\color{harmonizedblue}SR^*(ML)} < {\color{harmonizedblue}SR^*(GKN)}$
+    \item ${\color{harmonizedblue}R^2_{OOS}(ML)} > {\color{harmonizedblue}R^2_{OOS}(GKN)}$ but ${\color{harmonizedblue}SR^*(ML)} < {\color{harmonizedblue}SR^*(GKN)}$
     \begin{flushright}
       \textsc{\color{steelblue} ... Why?}
     \end{flushright}
     \item Different ${\color{steelblue}R_f}$ may still undermine results, but also european stocks have \textbf{\color{primaryred}lower returns} than US stocks.
-    \item Is Ml worthy under \textbf{\color{primaryred}relatively small databases }?
+    \item Is ML worthy under \textbf{\color{primaryred}relatively small databases }?
     \item \textcolor{harmonizedblue}{NNW}: VERY \textbf{\color{primaryred}powerfull!}
   \end{enumerate}
   
