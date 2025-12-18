@@ -12,6 +12,7 @@
 \usepackage{colortbl} 
 \usepackage{algorithm}
 \usepackage{algorithmic}
+\usepackage{pifont}
 \usepackage[backend=biber]{biblatex}
 \addbibresource{EAP_ML.bib}
 % ---------------- Fonts ----------------
@@ -163,9 +164,32 @@ $\underbrace{2005\text{--}2015}_{\text{Train}}
     \end{enumerate}
     \end{frame}
 
-
-
-
+    \begin{frame}{\textsc{Sharpe Ratio from GKN}}
+GKN \cite{gu_empirical_2020} propose to evaluate model performance using the \textbf{\color{steelblue}Sharpe ratio} of a long-short portfolio based on model predictions:
+      \begin{align*}
+        \boxed{
+        {\color{harmonizedblue}SR^{*}}
+        =
+        \sqrt{
+        \frac{
+        SR^{2} + {\color{primaryred}R^{2}_{\text{OOS}}}
+        }{
+        1 - {\color{primaryred}R^{2}_{\text{OOS}}}
+        }
+        }
+        }
+        \end{align*}
+        
+      
+      
+      \vspace{0.5em}
+      
+      \begin{itemize}
+        \item[\textcolor{darkgreen}{\ding{51}}] {\color{harmonizedblue}$SR^*$}: Adjusted Sharpe ratio using ${\color{primaryred}R^{2}_{\text{OOS}}}$.
+        \item[\textcolor{darkgreen}{\ding{51}}] Rewards models with {\color{steelblue}high out-of-sample $R^2$}.
+      \end{itemize}
+      
+      \end{frame}
 
   \begin{frame}{\textsc{Look-Ahead Bias Checks}}    
     \begin{enumerate}
@@ -181,7 +205,7 @@ $\underbrace{2005\text{--}2015}_{\text{Train}}
             \item[\textcolor{darkgreen}{\ding{51}}] Verifies if results don't "break" with different cutoffs.
         \end{itemize}
     
-        \item {\color{primaryred}Lagged Signal Test}
+        \item {\color{primaryred}Shifted Sharpe}
         \begin{itemize}
             \item[\textcolor{darkgreen}{\ding{51}}] Shift predicted signals backward in time.
             \item[\textcolor{darkgreen}{\ding{51}}] Confirms that results do not rely on forward-looking information.
@@ -204,7 +228,31 @@ $\underbrace{2005\text{--}2015}_{\text{Train}}
     \item[\textcolor{red}{\ding{55}}] GBRT 
   \end{itemize}
 \end{frame}
-  
+
+\begin{frame}{\textsc{Some Specifics}}
+  \begin{enumerate}
+    \item \textbf{\color{primaryred}Random Forest (RF):}
+    \begin{itemize}
+      \item \textcolor{harmonizedblue}{Depth:} 2,4,6
+      \item \textcolor{harmonizedblue}{Leaf Size:} 40 
+      \item \textcolor{harmonizedblue}{Number of trees:} 200
+    \end{itemize}
+
+    \item \textbf{\color{primaryred}Neural Networks (NNW):}
+    \begin{itemize}
+      \item \textcolor{harmonizedblue}{Depth:} 1-6 hidden layers
+      \item \textcolor{harmonizedblue}{Epochs:} 50
+      \item \textcolor{harmonizedblue}{Learning Rate(lr):} .001
+    \end{itemize}
+
+    \item \textbf{\color{primaryred}Principal Component Regression (PCR):}
+    \begin{itemize}
+      \item \textcolor{harmonizedblue}{Number of Components (K):} 1-6 (where 0 = OLS)
+      \item \textcolor{harmonizedblue}{K:} Top eigenvectors (by variance explained)
+    \end{itemize}
+  \end{enumerate}
+\end{frame}
+
 \begin{frame}{\textsc{The Huber Loss Function}}
 
   Following GKN \cite{gu_empirical_2020}, we use a \textbf{\color{steelblue}Huber loss function} to be robust to outliers when estimating our OLS benchmark models:
@@ -225,7 +273,7 @@ $\underbrace{2005\text{--}2015}_{\text{Train}}
  \begin{frame}{$R_{OOS}^2$ \textsc{BEST Models:}}
 
   \centering
-  \LARGE
+  \Large
   \begin{tabular}{lccccc}
   \toprule
    & {\color{harmonizedblue}NN5} 
@@ -316,7 +364,7 @@ $\underbrace{2005\text{--}2015}_{\text{Train}}
 
 \end{frame}
 
- \section{\textsc{Results}}
+ \section{\textsc{Results \& Discussion}}
 
 \begin{frame}{Cummulation of Wealth}
   \begin{figure}
@@ -326,8 +374,22 @@ $\underbrace{2005\text{--}2015}_{\text{Train}}
   \end{figure}
 \end{frame}
 
-\begin{frame}{\textsc{References:}}
-  \printbibliography[heading=none,notkeyword=this]
+\begin{frame}{\textsc{Discussion}}
+  \begin{enumerate}
+    \item ${\color{harmonizedblue}R^2_{OOS}(ML)} > {\color{harmonizedblue}R^2_{OOS}(GKN)}$, but ${\color{harmonizedblue}SR^*(ML)} < {\color{harmonizedblue}SR^*(GKN)}$
+    \begin{flushright}
+      \textsc{\color{steelblue} ... Why?}
+    \end{flushright}
+    \item Different ${\color{steelblue}R_f}$ may still undermine results, but also european stocks have \textbf{\color{primaryred}lower returns} than US stocks.
+    \item Is Ml worthy under \textbf{\color{primaryred}relatively small databases }?
+    \item \textcolor{harmonizedblue}{NNW}: VERY \textbf{\color{primaryred}powerfull!}
+  \end{enumerate}
+  
+\end{frame}
+
+\begin{frame}[allowframebreaks]{\textsc{References:}}
+  \tiny
+  \printbibliography[heading=none]
 \end{frame}
 {
 \setbeamercolor{background canvas}{bg=midnight}

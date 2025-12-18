@@ -72,58 +72,6 @@
       \endverb
       \keyw{active trading strategy,stock return prediction machine learning}
     \endentry
-    \entry{fama_common_1993}{article}{}
-      \name{author}{2}{}{%
-        {{hash=cf1dad75742cba1f00261a0ee70e7ba2}{%
-           family={Fama},
-           familyi={F\bibinitperiod},
-           given={Eugene\bibnamedelima F.},
-           giveni={E\bibinitperiod\bibinitdelim F\bibinitperiod}}}%
-        {{hash=4ca55f4db61ae3245d066a218dca72c8}{%
-           family={French},
-           familyi={F\bibinitperiod},
-           given={Kenneth\bibnamedelima R.},
-           giveni={K\bibinitperiod\bibinitdelim R\bibinitperiod}}}%
-      }
-      \list{language}{1}{%
-        {en}%
-      }
-      \strng{namehash}{ac5c181ffbfa45c593cd5483bcb59bd3}
-      \strng{fullhash}{ac5c181ffbfa45c593cd5483bcb59bd3}
-      \strng{bibnamehash}{ac5c181ffbfa45c593cd5483bcb59bd3}
-      \strng{authorbibnamehash}{ac5c181ffbfa45c593cd5483bcb59bd3}
-      \strng{authornamehash}{ac5c181ffbfa45c593cd5483bcb59bd3}
-      \strng{authorfullhash}{ac5c181ffbfa45c593cd5483bcb59bd3}
-      \field{sortinit}{F}
-      \field{sortinithash}{2638baaa20439f1b5a8f80c6c08a13b4}
-      \field{labelnamesource}{author}
-      \field{labeltitlesource}{title}
-      \field{issn}{0304405X}
-      \field{journaltitle}{Journal of Financial Economics}
-      \field{month}{2}
-      \field{number}{1}
-      \field{title}{Common risk factors in the returns on stocks and bonds}
-      \field{urlday}{21}
-      \field{urlmonth}{11}
-      \field{urlyear}{2025}
-      \field{volume}{33}
-      \field{year}{1993}
-      \field{urldateera}{ce}
-      \field{pages}{3\bibrangedash 56}
-      \range{pages}{54}
-      \verb{doi}
-      \verb 10.1016/0304-405X(93)90023-5
-      \endverb
-      \verb{file}
-      \verb PDF:/Users/lucasdubois/Zotero/storage/24WZPY25/Fama et French - 1993 - Common risk factors in the returns on stocks and bonds.pdf:application/pdf
-      \endverb
-      \verb{urlraw}
-      \verb https://linkinghub.elsevier.com/retrieve/pii/0304405X93900235
-      \endverb
-      \verb{url}
-      \verb https://linkinghub.elsevier.com/retrieve/pii/0304405X93900235
-      \endverb
-    \endentry
     \entry{gu_empirical_2020}{article}{}
       \name{author}{3}{}{%
         {{hash=6dfe1a2bf09425e309ca767a1acc7325}{%
