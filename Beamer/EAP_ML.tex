@@ -89,13 +89,13 @@
 \end{frame}
 
 % ================== Content ==================
-\section{\textsc{Introduction:}}
+\section{\textsc{Introduction}}
 
 %=================HERE FOR THE NEW PART=================
 
-\begin{frame}{\textsc{Dataset and Metrics:}}
+\begin{frame}{\textsc{Database}}
   \begin{itemize}
-      \item {\color{primaryred}\textbf{Universe:}} Monthly european equities (Refinitiv)
+      \item {\color{primaryred}\textbf{Universe:}} Monthly european stocks (Refinitiv).
       \item {\color{primaryred}\textbf{Sample:}} {\color{steelblue}\textbf{599 individual stocks}} (stoxx600 constituents).
       \item {\color{primaryred}\textbf{$R_f$:}} EURIBOR 1M.
       \item {\color{primaryred}\textbf{Period:}}
@@ -108,27 +108,7 @@ $\underbrace{2005\text{--}2015}_{\text{Train}}
   \end{itemize}
 \end{frame}
 
-\begin{frame}{\textsc{Winsorization and Standardization}}
-  \begin{algorithm}[H]
-    \small
-    \caption{{\color{primaryred}Cross-Sectional Standardizer}}
-    \begin{algorithmic}
-      \STATE \textbf{Input:} Training data $\mathcal{D}^{\text{train}}$, data $\mathcal{D}$, predictors $\mathcal{X}$
-      
-      \FOR{each predictor $j \in \mathcal{X}$}
-        \STATE Compute lower quantile $q_j^{L}$ and upper quantile $q_j^{U}$ from $\mathcal{D}^{\text{train}}$
-        \STATE Compute mean $\mu_j$ and standard deviation $\sigma_j$ from $\mathcal{D}^{\text{train}}$
-      \ENDFOR
-      
-      \FOR{each observation $i \in \mathcal{D}$}
-        \FOR{each predictor $j \in \mathcal{X}$}
-          \STATE $X_{ij} \leftarrow \min(\max(X_{ij}, q_j^{L}), q_j^{U})$
-          \STATE $\tilde{X}_{ij} \leftarrow (X_{ij} - \mu_j) / \sigma_j$
-        \ENDFOR
-      \ENDFOR
-          \end{algorithmic}
-  \end{algorithm}
-\end{frame}
+\section{\textsc{Data Preprocessing}}
 
 \begin{frame}{\textsc{Winsorization and Standardization}}
   \textcolor{primaryred}{GKN} \cite{gu_empirical_2020} do not explicitly describe how firm characteristics are preprocessed, so we follow {\color{primaryred}Drobetz and Otto} \cite{drobetz_empirical_2020} and implement a \textcolor{harmonizedblue}{winsorization} procedure.
@@ -143,6 +123,29 @@ $\underbrace{2005\text{--}2015}_{\text{Train}}
       \item[\textcolor{darkgreen}{\ding{51}}] Improves out-of-sample performance.
   \end{itemize}
   \end{frame}
+
+  \begin{frame}{\textsc{Winsorization and Standardization}}
+    \begin{algorithm}[H]
+      \small
+      \caption{{\color{primaryred}Cross-Sectional Standardizer}}
+      \begin{algorithmic}
+        \STATE \textbf{Input:} Training data $\mathcal{D}^{\text{train}}$, data $\mathcal{D}$, predictors $\mathcal{X}$
+        
+        \FOR{each predictor $j \in \mathcal{X}$}
+          \STATE Compute lower quantile $q_j^{L}$ and upper quantile $q_j^{U}$ from $\mathcal{D}^{\text{train}}$
+          \STATE Compute mean $\mu_j$ and standard deviation $\sigma_j$ from $\mathcal{D}^{\text{train}}$
+        \ENDFOR
+        
+        \FOR{each observation $i \in \mathcal{D}$}
+          \FOR{each predictor $j \in \mathcal{X}$}
+            \STATE $X_{ij} \leftarrow \min(\max(X_{ij}, q_j^{L}), q_j^{U})$
+            \STATE $\tilde{X}_{ij} \leftarrow (X_{ij} - \mu_j) / \sigma_j$
+          \ENDFOR
+        \ENDFOR
+            \end{algorithmic}
+    \end{algorithm}
+  \end{frame}
+
   \begin{frame}{\textsc{Cross-Validation for Tuning Parameters:}}
     The authors use a \textbf{\color{steelblue} rolling one-step-ahead out-of-sample cross-validation} procedure to select the \textbf{\color{primaryred}hyperparameters} of their models:
       \begin{align}
@@ -159,6 +162,10 @@ $\underbrace{2005\text{--}2015}_{\text{Train}}
       \item Prevent \textbf{\color{steelblue} look-ahead bias} (terrible idea in finance!).
     \end{enumerate}
     \end{frame}
+
+
+
+
 
   \begin{frame}{\textsc{Look-Ahead Bias Checks}}    
     \begin{enumerate}
@@ -184,6 +191,19 @@ $\underbrace{2005\text{--}2015}_{\text{Train}}
     \end{frame}
     
 \section{\textsc{Models}}
+
+\begin{frame}{\textsc{Models Tested}}
+  \begin{itemize}
+    \item[\textcolor{darkgreen}{\ding{51}}]OLS (\textcolor{primaryred}{benchmark})
+    \item[\textcolor{darkgreen}{\ding{51}}]OLS-3 (\textcolor{primaryred}{benchmark})
+    \item[\textcolor{darkgreen}{\ding{51}}] Elastic-Net (ENet)
+    \item[\textcolor{darkgreen}{\ding{51}}] Random Forest (RF)
+    \item[\textcolor{darkgreen}{\ding{51}}] Neural Networks (NN1 to NN6)
+    \item[\textcolor{darkgreen}{\ding{51}}] Principal Component Regression (PCR) 
+    \item[\textcolor{red}{\ding{55}}] Partial Least Squares (PLS)
+    \item[\textcolor{red}{\ding{55}}] GBRT 
+  \end{itemize}
+\end{frame}
   
 \begin{frame}{\textsc{The Huber Loss Function}}
 
@@ -202,6 +222,99 @@ $\underbrace{2005\text{--}2015}_{\text{Train}}
    \item[\textcolor{darkgreen}{\ding{51}}] Avoid the \textcolor{harmonizedblue}{sensitivity of MSE} to fat tails in return distributions.
  \end{itemize}
  \end{frame}
+ \begin{frame}{$R_{OOS}^2$ \textsc{BEST Models:}}
+
+  \centering
+  \LARGE
+  \begin{tabular}{lccccc}
+  \toprule
+   & {\color{harmonizedblue}NN5} 
+   & {\color{harmonizedblue}NN4} 
+   & {\color{harmonizedblue}RF} 
+   & {\color{harmonizedblue}OLS-3} 
+   & {\color{harmonizedblue}ENet} \\
+  \midrule
+  \rowcolor{green!20}
+  {\color{primaryred}GKN}        
+    & 0.36 & 0.39 & 0.33 & 0.26 & 0.16 \\
+  \midrule
+  \rowcolor{green!20}
+  {\color{primaryred}ML} 
+    & 1.50 & 1.20 & 1.10 & 0.93 & 0.80 \\
+  \bottomrule
+  \end{tabular}
+
+\end{frame}
+
+\begin{frame}{$R_{OOS}^2$ \textsc{WORST Models:}}
+
+  \centering
+  \Large
+  \begin{tabular}{lccccc}
+  \toprule
+   & {\color{harmonizedblue}NN1} 
+   & {\color{harmonizedblue}NN2} 
+   & {\color{harmonizedblue}NN3} 
+   & {\color{harmonizedblue}OLS} 
+   & {\color{harmonizedblue}PCR} \\
+  \midrule
+  \rowcolor{red!20}
+  {\color{primaryred}GNK}          
+    & 0.33 & 0.39 & 0.40 & -3.46 & 0.26 \\
+  \midrule
+  \rowcolor{red!20}
+  {\color{primaryred}ML} 
+    & -18.10 & 0.70 & 0.8 & 0.68 & 0.80  \\
+  \bottomrule
+  \end{tabular}
+
+\end{frame}
+
+\begin{frame}{ \textsc{Sharpe BEST Models:}}
+
+  \centering
+  \LARGE
+  \begin{tabular}{lcccc}
+  \toprule
+   & {\color{harmonizedblue}OLS} 
+   & {\color{harmonizedblue}NN6} 
+   & {\color{harmonizedblue}RF} 
+   & {\color{harmonizedblue}NN4}\\
+  \midrule
+  \rowcolor{green!20}
+  {\color{primaryred}GKN}        
+    & LOW & -- & 0.98 & 1.35  \\
+  \midrule
+  \rowcolor{green!20}
+  {\color{primaryred}ML} 
+    & 1.03 & 0.87 & 0.73 & 0.73  \\
+  \bottomrule
+  \end{tabular}
+
+\end{frame}
+
+\begin{frame}{\textsc{Sharpe WORST Models:}}
+
+  \centering
+  \LARGE
+  \begin{tabular}{lcccc}
+  \toprule
+   & {\color{harmonizedblue}NN2} 
+   & {\color{harmonizedblue}NN3} 
+   & {\color{harmonizedblue}NN5} 
+   & {\color{harmonizedblue}OLS-3} \\
+  \midrule
+  \rowcolor{red!20}
+  {\color{primaryred}GNK}          
+    & 1.16 & 1.20 & 1.15 & 0.26 \\
+  \midrule
+  \rowcolor{red!20}
+  {\color{primaryred}ML} 
+    & 0.40 & 0.61 & 0.68 & 0.72   \\
+  \bottomrule
+  \end{tabular}
+
+\end{frame}
 
  \section{\textsc{Results}}
 
@@ -213,557 +326,6 @@ $\underbrace{2005\text{--}2015}_{\text{Train}}
   \end{figure}
 \end{frame}
 
-\begin{frame}{\textsc{Benchmark Model:}}
-The autors use a characteristic OLS model (\textbf{\color{harmonizedblue}OLS-3+H}) , similar to the famous \textcolor{primaryred}{Fama-French 3-factor model \cite{fama_common_1993}}, as benchmark:
-  \begin{align}\tag{1}
-    {\color{primaryred}\hat r_{i,t+1}}
-    &=
-    \textcolor{harmonizedblue}{
-      \underbrace{
-        {\color{steelblue}
-          \hat\beta_1 \,\text{SIZE}_{i,t}
-          + \hat\beta_2 \,\text{VALUE}_{i,t}
-          + \hat\beta_3 \,\text{MOM}_{i,t}
-        }
-      }_{\mathclap{\text{3-factors}}}
-    }
-    + \hat\delta_t
-    + \hat\gamma_{j(i)}.
-  \end{align}
-This benchmark is commonly used in the empirical asset pricing literature, as well as in practice by asset managers.
-\end{frame}
-
-\begin{frame}{\textsc{An Important Metric:}}
-  Throughout the paper, the authors use the \textbf{\color{steelblue}out-of-sample $R^2$} to evaluate model performance:
-  \begin{align}
-    {\color{primaryred}R^2_{OOS} } 
-    = 1 - \frac{\displaystyle\sum_{t = T_0}^{T} \left( r_{t+1} - \hat r_{t+1} \right)^{2}} {\displaystyle\sum_{t = T_0}^{T} \left( r_{t+1} - \bar r \right)^{2}}
-  \end{align}
-\begin{itemize}
-  \item Measures \textbf{\color{steelblue} raw predictive power} of a model.
-  \item No \textsc{\color{primaryred} complexity penalty} term.
-\end{itemize}
-\end{frame}
-
-
-\section{\textsc{Penalized Regressions:}}
-
-\begin{frame}{\textsc{General Idea:}}
-  \begin{quotation}
-    \textit{“The simple linear model is bound to fail in the presence of many predictors. 
-    When the number of predictors $P$ approaches the number of observations $T$, the linear model becomes inefficient or even inconsistent.”} 
-     Gu, Kelly \& Xiu \cite{gu_empirical_2020}
-  \end{quotation}
-  \textsc{\color{harmonizedblue}Why Penalize?}
-  \begin{itemize}
-    \item Low \textbf{\color{primaryred} signal-to-noise ratio} in asset returns
-          {\color{steelblue} $\Rightarrow$} overfitting risk!
-    \item \textbf{\color{primaryred} Multicollinearity} among predictors
-          {\color{steelblue} $\Rightarrow$} unstable estimates!
-  \end{itemize}
-\end{frame}
-
-\begin{frame}{\textsc{Introducing Penalties:}}
-  The basic framework for the \textcolor{steelblue}{penalized regressions} takes place as a penalty in the \textcolor{primaryred}{cost function}:
-  \begin{align}
-    \mathbb{L}(\theta,.) &= 
-    \textcolor{harmonizedblue}{
-      \underbrace{{\color{primaryred}\mathbb{L}(\theta)}}_{\mathclap{\text{MSE}}}
-      + 
-        {\color{steelblue}\phi(\theta,.)}
-      }
-  \end{align}
-\end{frame}
-
-\begin{frame}{\textsc{Elastic-Net Penalty:}}
-The authors define the \textbf{\color{steelblue}Elastic-Net} penalty as:
-  \begin{align}
-    {\color{steelblue}\phi(\theta;\lambda,{\color{primaryred}\rho})} 
-    &= \lambda(1-{\color{primaryred}\rho}) \sum_{j=1}^{P} |\theta_j|
-    + \frac{1}{2} \lambda {\color{primaryred} \rho} \sum_{j=1}^{P} \theta_j^2
-  \end{align}
-This notation can be converted to the one we used in class by letting {${\color{primaryred}\alpha = 1 - \rho}$}. \\
-The tuning parameters are the \textcolor{primaryred}{mixing parameter ($\rho$)}  and the \textcolor{steelblue}{strength parameter ($\lambda$)}.\\
-We can find our \textit{special cases}:
-\\
-\[
-\begin{cases}
-  \text{Lasso:} & {\color{primaryred}\rho= 0} \\
-  \text{Ridge:} & {\color{primaryred}\rho = 1}
-\end{cases}
-\]
-\end{frame}
-
-\begin{frame}{\textsc{Optimization Algorithm:}}
-  \begin{algorithm}[H]
-    \caption{{\color{primaryred}Accelerated Proximal Gradient Method (FISTA)}}
-    \begin{algorithmic}
-      \STATE \textbf{Initialization:} $\theta_0 = 0$, $m = 0$, step size $\gamma$
-      \WHILE{$\theta_m$ not converged}
-        \STATE $\bar{\theta} \leftarrow \theta_m - \gamma \nabla L(\theta)\big|_{\theta = \theta_m}$
-        \STATE $\tilde{\theta} \leftarrow \operatorname{prox}_{\gamma\phi}(\bar{\theta})$
-        \STATE $\theta_{m+1} \leftarrow \tilde{\theta} + \dfrac{m}{m+3}(\tilde{\theta} - \theta_m)$
-        \STATE $m \leftarrow m + 1$
-      \ENDWHILE
-      \STATE \textbf{Result:} Final parameter estimate $\theta_m$
-    \end{algorithmic}
-    \end{algorithm}         
-\end{frame}
-
-\section{\textsc{Dimensionality Reduction:}}
-
-\begin{frame}{\textsc{Basic Framework:}}
-  \begin{align}
-    {\color{primaryred}R} &= {\color{steelblue}Z}\theta + E,
-  \end{align}
-  \begin{align*}
-    \text{where}\quad
-    \begin{cases}
-    {\color{primaryred}R} \in \mathbb{R}^{NT \times 1} & \text{is the stacked vector of returns } r_{i,t+1}, \\[4pt]
-    {\color{steelblue}Z} \in \mathbb{R}^{NT \times P} & \text{is the stacked predictor matrix } z_{i,t}', \\[4pt]
-    \theta \in \mathbb{R}^{P \times 1} & \text{is the full coefficient vector}, \\[4pt]
-    E \in \mathbb{R}^{NT \times 1} & \text{is the stacked residual vector } \varepsilon_{i,t+1}.
-    \end{cases}
-  \end{align*}
-\end{frame}
-
-\begin{frame}{\textsc{Basic Framework:}}
-\begin{align}
-  {\color{primaryred}R}&= ({\color{steelblue}Z} {\color{harmonizedblue}\Omega_{K}})\, \theta_{K} + \tilde{E}
-\end{align}
-\begin{align*}
-\text{where }
-&\begin{cases}
-{\color{harmonizedblue}\Omega_{K}} \in \mathbb{R}^{P \times K} 
-& \text{contains the component weights } (w_1,\dots,w_K), \\[6pt]
-{\color{steelblue}Z}{\color{harmonizedblue}\Omega_{K}}\in \mathbb{R}^{NT \times K} 
-& \text{is the dimension-reduced predictor matrix}, \\[6pt]
-\theta_{K} \in \mathbb{R}^{K \times 1} 
-& \text{is the coefficient vector in reduced space}, \\[6pt]
-\tilde{E} \in \mathbb{R}^{NT \times 1} 
-& \text{is the new residual vector}.
-\end{cases}
-\end{align*}
-\end{frame}
-
-\begin{frame}{\textsc{General Idea:}}
-  \begin{itemize}
-    \item $P$ can be very large (hundreds or thousands of characteristics), 
-          but expected returns live in a \emph{low-dimensional} space.
-    \item PCR / PLS construct ${\color{primaryred}K \ll P}$ \emph{predictive components}:
-          \[
-          {\color{steelblue}Z}{\color{harmonizedblue}\Omega_{K}} \in \mathbb{R}^{NT \times K}, \quad
-          {\color{harmonizedblue}\Omega_{K}} = [w_1,\dots,w_K].
-          \]
-    \item Each $w_j$ is a set of weights forming a linear combination of characteristics
-          (a “latent factor” or component).
-    \item Instead of forecasting with many noisy, collinear signals,
-          we forecast with a few stable, informative components that summarize the
-          underlying economic forces driving returns.
-  \end{itemize}
-\end{frame}
-
-\begin{frame}{\textsc{Penalized Regression vs. Dimension Reduction}}
-
-  \centering
-  \begin{tabular}{lcc}
-  \toprule
-  & \textbf{\color{primaryred}Penalized Regression} & \textbf{\color{primaryred} Dimension Reduction} \\
-  \midrule
-  \textcolor{steelblue}{Goal}
-  & shrink coefficients $\theta$ 
-  & reduce predictors to $K\ll P$ \\
-
-  \textcolor{steelblue}{Form}
-  & $\min_\theta L(\theta)+\phi(\theta)$ 
-  & $R=(Z\Omega_K)\theta_K+\tilde E$ \\
-  
-  \textcolor{steelblue}{Dimensionality} 
-  & stays at $P$ 
-  & becomes $K$ \\
-  
-  \textcolor{steelblue}{Complexity Control}
-  & penalty (L1/L2/EN) 
-  & projection $Z\to Z\Omega_K$ \\
-  
-  \textcolor{steelblue}{Examples} 
-  & Ridge, Lasso, EN 
-  & PCR, PLS \\
-  \bottomrule
-  \end{tabular}
-\end{frame}
-
-\begin{frame}{\textsc{Principal Components Regression (PCR)}}
-
-  \begin{enumerate}
-    \item Compute eigenvectors of ${\color{steelblue}Z^\top Z}$.
-    \item Select the top $K$ eigenvectors:
-    \[
-    {\color{harmonizedblue}\Omega_K }= [w_1,\dots,w_K].
-    \]
-    \item Construct components:
-    \[
-    C = {\color{steelblue}Z}{\color{harmonizedblue}\Omega_{K}}.
-    \]
-    \item Run OLS on reduced predictors:
-    \[
-    R = C \theta_K + \tilde{E}.
-    \]
-  \end{enumerate}
-  
-  \medskip
-   
-  PCR finds directions in ${\color{steelblue}Z}$ with the \emph{\color{primaryred}largest variance}.  
-  It assumes that predictive power lies in high-variance directions of the characteristic space.
-  
-\end{frame}
-
-\begin{frame}{\textsc{Partial Least Squares (PLS)}}
-  \begin{enumerate}
-    \item First component solves:
-    \[
-    w_1 = \arg\max_{\|w\|=1} ({\color{primaryred}R^\top}{\color{steelblue} Z} w)^2.
-    \]
-    \item Form the first score:
-    \[
-    c_1 = {\color{steelblue} Z} w_1.
-    \]
-    \item Deflate ${\color{steelblue} Z} $ and ${\color{primaryred}R}$; repeat to obtain $w_2,\dots,w_K$:
-    \[
-    {\color{harmonizedblue}\Omega_K} = [w_1,\dots,w_K].
-    \]
-    \item Regress on reduced predictors:
-    \[
-    R = ( {\color{steelblue}Z}{\color{harmonizedblue}\Omega_{K}})\theta_K + \tilde{E}.
-    \]
-  \end{enumerate}
-  
-  \medskip
-  PLS chooses directions \emph{\color{primaryred} most useful for predicting returns}, making it supervised and more targeted than PCR.
-\end{frame}
-
-\begin{frame}{PCR vs. PLS}
-
-  \centering
-  \small
-  \begin{tabular}{lcc}
-  \toprule
-  & \textbf{\color{primaryred}PCR} & \textbf{\color{primaryred}PLS} \\
-  \midrule
-  {\color{steelblue}Optimizes}
-  & variance of $Z$ & covariance with $R$ \\
-  
-  {\color{steelblue}Supervised?}
-  & No & Yes \\
-  
-  {\color{steelblue}Components}
-  & eigenvectors of $Z^\top Z$ 
-  & directions maximizing $R^\top Z w$ \\
-  
-  {\color{steelblue}Reduced predictors}
-  &Variance components
-  &Predictive components \\
-  
-  {\color{steelblue}Strength}
-  & Captures structure of $Z$ 
-  &  Return-predictive signals \\
-  
-  {\color{steelblue}Weakness}
-  & Ignores $R$ in components 
-  & Nonlinearities(?) \\
-  \bottomrule
-  \end{tabular}
-  
-\end{frame}
-
-% ================== NON-LINEAR MODELS & RESULTS ==================
-\section{\textsc{Non-Linear Models \& Results}}
-
-\begin{frame}{\textsc{Why Go Non-Linear?}}
-  \textbf{\color{harmonizedblue}The Linear Limitation:}
-  \begin{itemize}
-    \item Linear models assume the effect of a predictor (e.g., Value) is constant, regardless of other conditions (e.g., Volatility).
-    \item \textbf{\color{primaryred}Reality:} Asset pricing is likely conditional. 
-    \begin{itemize}
-        \item \textit{Example:} "Value" might only work well during high volatility.
-    \end{itemize}
-  \end{itemize}
-  
-  \vspace{1em}
-  
-  \textbf{\color{harmonizedblue}The Machine Learning Solution:}
-  \begin{itemize}
-    \item Use flexible functional forms $g(z_{i,t})$ to capture \textbf{\color{steelblue}interactions} without specifying them ex-ante.
-    \item We examine three classes: \textbf{GLM}, \textbf{Regression Trees}, and \textbf{Neural Networks}.
-  \end{itemize}
-\end{frame}
-
-\begin{frame}{\textsc{1. Generalized Linear Models (GLM)}}
-  GLM introduces non-linearity via \textbf{\color{steelblue}Splines} (piecewise polynomials) for each predictor individually.
-  
-  \begin{align}
-    g(z;\theta) &= \sum_{j=1}^{P} \sum_{k=1}^{K} \theta_{j,k} \, p_k(z_j)
-  \end{align}
-  
-  \begin{itemize}
-    \item \textbf{\color{primaryred}Penalty:} Uses \textbf{Group Lasso} to select or drop entire characteristics (group of spline terms) at once.
-    \item \textbf{\color{harmonizedblue}Limitation:} It is additive. It captures non-linearities of \textit{single} variables ($z_j^2$), but \textbf{misses cross-variable interactions} ($z_i \times z_j$).
-  \end{itemize}
-\end{frame}
-
-\begin{frame}{\textsc{2. Tree-Based Methods}}
-  Trees partition the predictor space into rectangular regions and predict the average return in each "leaf."
-  
-  \begin{columns}
-    \begin{column}{0.6\textwidth}
-      \textbf{\color{steelblue}Random Forests (RF):}
-      \begin{itemize}
-        \item Builds $B$ deep, decorrelated trees.
-        \item Uses \textbf{Dropout}: Randomly subsets predictors at each split to force diversity.
-        \item Prediction is the \textit{average} of all trees (reduces variance).
-      \end{itemize}
-      
-      \vspace{0.5em}
-      
-      \textbf{\color{steelblue}Gradient Boosted Trees (GBRT):}
-      \begin{itemize}
-        \item Sequentially builds shallow "weak learners."
-        \item Each tree corrects the errors of the previous one.
-      \end{itemize}
-    \end{column}
-    \begin{column}{0.4\textwidth}
-      \centering
-      \begin{tikzpicture}[scale=0.7, every node/.style={scale=0.7}]
-        % Simple Tree Visualization
-        \node [circle, draw=primaryred, thick] (r) at (2,3) {Size?};
-        \node [circle, draw=steelblue, thick] (a) at (1,1.5) {Val?};
-        \node [rectangle, draw=black, fill=gray!20] (b) at (3,1.5) {$R_3$};
-        \node [rectangle, draw=black, fill=gray!20] (c) at (0,0) {$R_1$};
-        \node [rectangle, draw=black, fill=gray!20] (d) at (2,0) {$R_2$};
-        \draw [->] (r) -- (a) node [midway, left] {\tiny Small};
-        \draw [->] (r) -- (b) node [midway, right] {\tiny Big};
-        \draw [->] (a) -- (c) node [midway, left] {\tiny Growth};
-        \draw [->] (a) -- (d) node [midway, right] {\tiny Value};
-      \end{tikzpicture}
-      \vspace{0.2em}
-      \\ \footnotesize \textit{Captures interactions naturally.}
-    \end{column}
-  \end{columns}
-\end{frame}
-
-\begin{frame}{\textsc{3. Neural Networks (NN)}}
-  The most flexible model. Composed of an \textbf{Input Layer}, \textbf{Hidden Layers} (nonlinearities), and an \textbf{Output Layer}.
-  
-  \begin{block}{Feed-Forward Architecture}
-    For a neuron $k$ in layer $l$, the value is a non-linear transformation of the previous layer:
-    \
-  \end{block}
-  
-  \begin{itemize}
-    \item \textbf{\color{primaryred}Activation:} Rectified Linear Unit ($ReLU(x) = \max(0,x)$).
-    \item \textbf{\color{primaryred}Regularization:} Essential to prevent overfitting.
-    \begin{itemize}
-        \item $L_1$ Penalty, Early Stopping, Batch Normalization, Ensembles.
-    \end{itemize}
-    \item \textbf{\color{primaryred}Architectures:} Tested NN1 (1 layer) to NN5 (5 layers).
-  \end{itemize}
-\end{frame}
-
-\begin{frame}{\textsc{Results: Out-of-Sample $R^2$}}
-  \centering
-  \textit{Non-linear models dominate linear benchmarks.}
-  
-  \vspace{1em}
-  \renewcommand{\arraystretch}{1.3}
-  \begin{tabular}{lccccc}
-  \toprule
-  \textbf{Model} & \textbf{OLS-3} & \textbf{En-Net} & \textbf{GLM} & \textbf{RF} & \textbf{NN3} \\
-  \midrule
-  \textbf{$R^2_{OOS}$ (\%)} & 0.16 & 0.11 & 0.19 & 0.33 & \textbf{\color{primaryred} 0.40} \\
-  \bottomrule
-  \end{tabular}
-  
-  \vspace{1em}
-  \begin{itemize}
-      \item \textbf{\color{steelblue}GLM Failure:} Performance is close to linear models $\Rightarrow$ Univariate non-linearity is \textit{not} enough.
-      \item \textbf{\color{steelblue}NN3 Peak:} Performance peaks at 3 layers. "Shallow" learning works best for finance (low signal-to-noise).
-      \item \textbf{\color{steelblue}Economic Value:} Small $R^2$ gains translate to large profits.
-  \end{itemize}
-\end{frame}
-
-\begin{frame}{\textsc{Results: Economic Gains (Sharpe Ratios)}}
-  Annualized Sharpe Ratios for Long-Short Decile Portfolios (Value-Weighted):
-  
-  \vspace{-0.5em}
-  \begin{itemize}
-      \item Neural Networks \textbf{\color{primaryred}more than double} the risk-adjusted returns of the OLS benchmark.
-  \end{itemize}
-\end{frame}
-
-\begin{frame}{\textsc{What Matters? (Interpretability)}}
-  By analyzing variable importance (Sensitivity Analysis), models agree on the dominant signals:
-  
-  \begin{enumerate}
-      \item \textbf{\color{harmonizedblue}Price Trends:} Momentum (12m), Short-term Reversal (1m).
-      \item \textbf{\color{harmonizedblue}Liquidity:} Market Cap, Dollar Volume, Bid-Ask Spread.
-      \item \textbf{\color{harmonizedblue}Volatility:} Idiosyncratic Volatility, Beta.
-  \end{enumerate}
-  
-  \vspace{1em}
-  \textit{Why do NN and Trees win?}
-  They capture \textbf{\color{primaryred}Interaction Effects}.
-  \begin{itemize}
-      \item \textit{Example:} The "Reversal" effect is strong for small stocks but weak/concave for large stocks. Linear models miss this nuance.
-  \end{itemize}
-\end{frame}
-
-\section{\textsc{Conclusion:}}
-%-----------------------------
-% Après la slide "Conclusion:"
-%-----------------------------
-
-
-\begin{frame}{\textsc{Conclusion:}}
-  What the Paper brings to {\color{steelblue}\textbf{Empirical Asset Pricing}}
-  \begin{enumerate}
-      \item {Systematic Comparison}
-      \item {Bridges tradition with modernity}
-      \item {Shows limits}
-  \end{enumerate}
-\end{frame}
-
-
-\begin{frame}{\textsc{Conclusion:}}
-  The Dataset
-  \begin{enumerate}
-      \item {30 000+ U.S. stocks}
-      \item {Almost 60 years of monthly data}
-      \item {900+ predictors from the "factor zoo"}
-      \item {Traditional models}
-  \end{enumerate}
-\end{frame}
-
-\begin{frame}{$R_{OOS}^2$ \textsc{BEST Models:}}
-
-  \centering
-  \Large
-  \begin{tabular}{lcccccc}
-  \toprule
-   & {\color{harmonizedblue}NN3} 
-   & {\color{harmonizedblue}NN4} 
-   & {\color{harmonizedblue}NN2} 
-   & {\color{harmonizedblue}NN5} 
-   & {\color{harmonizedblue}RF} 
-   & {\color{harmonizedblue}GBRT+H} \\
-  \midrule
-  \rowcolor{green!30}
-  {\color{primaryred}All}        
-    & 0.40 & 0.39 & 0.39  & 0.36 & 0.33 & 0.34 \\
-  {\color{primaryred}Top 1,000}  
-        & 0.67 & 0.62 & 0.70 & 0.64 & 0.63 & 0.52 \\
-  {\color{primaryred}Bottom 1,000} 
-        & 0.47 & 0.46 & 0.45 & 0.42 & 0.35 & 0.32 \\
-  \bottomrule
-  \end{tabular}
-
-\end{frame}
-
-
-\begin{frame}{$R_{OOS}^2$ \textsc{WORST Models:}}
-
-  \centering
-  \Large
-  \begin{tabular}{lccccccc}
-  \toprule
-   & {\color{harmonizedblue}OLS+H} 
-   & {\color{harmonizedblue}ENet+H}
-   & {\color{harmonizedblue}OLS-3+H} 
-   & {\color{harmonizedblue}GLM+H} 
-   & {\color{harmonizedblue}PCR} 
-   & {\color{harmonizedblue}PLS} 
-   & {\color{harmonizedblue}NN1} \\
-  \midrule
-  \rowcolor{red!30}
-  {\color{primaryred}All}          
-        & -3.46 & 0.11 & 0.16 & 0.19 & 0.26 & 0.27 & 0.33 \\
-  {\color{primaryred}Top 1,000}    
-        & -11.28 & 0.25 & 0.31 & 0.14 & 0.06 & -0.14 & 0.49 \\
-  {\color{primaryred}Bottom 1,000} 
-        & -1.30  & 0.20 & 0.17 & 0.30 & 0.34 & 0.42 & 0.38 \\
-  \bottomrule
-  \end{tabular}
-
-\end{frame}
-
-
-\begin{frame}{\textsc{Sharpe Ratio (H-L) BEST Models:}}
-
-  \centering
-  \Large
-  \begin{tabular}{lcccccc}
-  \toprule
-   & {\color{harmonizedblue}NN4} 
-   & {\color{harmonizedblue}NN3} 
-   & {\color{harmonizedblue}NN1} 
-   & {\color{harmonizedblue}NN2} 
-   & {\color{harmonizedblue}NN5} 
-   & {\color{harmonizedblue}RF} \\
-
-  \midrule
-  \rowcolor{green!30}
-  {\color{primaryred}SR(H--L)}    
-   & 1.35 & 1.20 & 1.17 & 1.16 & 1.15  & 0.98   \\
-  \bottomrule
-  \end{tabular}
-\end{frame}
-
-\begin{frame}{\textsc{Sharpe Ratio (H-L) WORST Models:}}
-
-  \centering
-  \Large
-  \begin{tabular}{lcccccc}
-  \toprule
-    & {\color{harmonizedblue}ENet+H} 
-   & {\color{harmonizedblue}OLS-3+H} 
-   & {\color{harmonizedblue}PLS} 
-   & {\color{harmonizedblue}GLM+H} 
-   & {\color{harmonizedblue}GBRT+H}
-   & {\color{harmonizedblue}PCR}\\
-  \midrule
-  \rowcolor{red!30}
-  {\color{primaryred}SR(H--L)}    
-  & 0.39& 0.61  & 0.72 & 0.76 & 0.81 & 0.88 \\
-  \bottomrule
-  \end{tabular}
-\end{frame}
-
-%-----------------------------------------------
-% Après la slide "Cumulative Returns ML Models:"
-%-----------------------------------------------
-
-
-\begin{frame}{\textsc{Conclusion:}}
-  Key Takeaways
-  \begin{enumerate}
-      \item {Return prediction improvement}
-      \item {Asset pricing evolution}
-  \end{enumerate}
-  Limitations of the Paper
-  \begin{enumerate}
-      \item {Interpretability}
-      \item {Large datasets}
-      \item {International robustness}
-  \end{enumerate}
-  Final Message
-\end{frame}
-
-\begin{frame}{\textsc{Final Message:}}
-  The Dataset
-  \begin{enumerate}
-      \item {New approach}
-      \item {Important modernization step}
-  \end{enumerate}
-\end{frame}
 \begin{frame}{\textsc{References:}}
   \printbibliography[heading=none,notkeyword=this]
 \end{frame}
